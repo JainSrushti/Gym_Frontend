@@ -1,0 +1,98 @@
+[
+  {
+    "id": "strength-training",
+    "title": "Strength Training",
+    "shortDesc": "Build muscle and increase overall strength with structured weight training.",
+    "fullDesc": "This program focuses on compound lifts, progressive overload, and proper technique to build strength safely and effectively.",
+    "level": "Beginner",
+    "duration": "8–12 Weeks",
+    "bestFor": "Beginners and strength-focused trainees",
+    "benefits": [
+      "Improved muscle strength",
+      "Better posture and stability",
+      "Safe progression with guidance",
+      "Foundation for advanced training"
+    ],
+    "scheduleHint": "Morning & Evening"
+  },
+  {
+    "id": "weight-loss",
+    "title": "Weight Loss Program",
+    "shortDesc": "Burn fat effectively through cardio, HIIT, and guided workouts.",
+    "fullDesc": "Designed to support fat loss using a mix of cardio, high-intensity workouts, and structured routines for consistent results.",
+    "level": "Intermediate",
+    "duration": "8 Weeks",
+    "bestFor": "Fat loss and endurance improvement",
+    "benefits": [
+      "Effective calorie burn",
+      "Improved stamina",
+      "Structured weekly routine",
+      "Trainer supervision"
+    ],
+    "scheduleHint": "Morning & Evening"
+  },
+  {
+    "id": "personal-training",
+    "title": "Personal Training",
+    "shortDesc": "One-on-one training sessions focused on personal fitness goals.",
+    "fullDesc": "Personalized training sessions with dedicated trainer attention, tailored workouts, and focused progress tracking.",
+    "level": "Expert",
+    "duration": "Custom",
+    "bestFor": "Customized fitness goals",
+    "benefits": [
+      "Personalized workout plan",
+      "One-on-one trainer guidance",
+      "Form correction",
+      "Goal-specific training"
+    ],
+    "scheduleHint": "Appointment Based"
+  },
+  {
+    "id": "functional-training",
+    "title": "Functional Training",
+    "shortDesc": "Improve mobility, balance, and real-life strength.",
+    "fullDesc": "Functional movements designed to enhance daily performance, coordination, flexibility, and overall strength.",
+    "level": "Intermediate",
+    "duration": "6–8 Weeks",
+    "bestFor": "Mobility and overall fitness",
+    "benefits": [
+      "Improved mobility",
+      "Better balance and coordination",
+      "Reduced injury risk",
+      "Functional strength"
+    ],
+    "scheduleHint": "Evening"
+  },
+  {
+    "id": "cardio-hiit",
+    "title": "Cardio & HIIT",
+    "shortDesc": "High-intensity workouts designed to boost stamina and burn calories.",
+    "fullDesc": "Fast-paced sessions combining cardio and HIIT techniques to maximize calorie burn and cardiovascular health.",
+    "level": "Intermediate",
+    "duration": "4–6 Weeks",
+    "bestFor": "Fat loss and conditioning",
+    "benefits": [
+      "High calorie burn",
+      "Improved cardiovascular health",
+      "Short, effective sessions",
+      "Increased endurance"
+    ],
+    "scheduleHint": "Morning"
+  },
+  {
+    "id": "body-transformation",
+    "title": "Body Transformation",
+    "shortDesc": "Complete physique transformation with guided training.",
+    "fullDesc": "A comprehensive program combining strength training, conditioning, and lifestyle guidance for visible results.",
+    "level": "Beginner",
+    "duration": "12 Weeks",
+    "bestFor": "Overall body transformation",
+    "benefits": [
+      "Visible physique changes",
+      "Structured training plan",
+      "Trainer guidance",
+      "Long-term habit building"
+    ],
+    "scheduleHint": "Morning & Evening"
+  }
+]

@@ -1,0 +1,62 @@
+[
+  {
+    "id": "rahul-sharma",
+    "name": "Rahul Sharma",
+    "photo": "https://img.freepik.com/premium-photo/young-black-personal-trainer-gym-smiling-with-crossed-arms_641878-388.jpg?w=996",
+    "experience": "6+ years",
+    "experienceYears": 6,
+    "specialization": "Strength & Muscle Building",
+    "bio": "Focused on progressive overload and sustainable muscle growth. Works closely with beginners and intermediate lifters with emphasis on correct form.",
+    "bestFor": [
+      "Beginners",
+      "Strength training",
+      "Muscle gain"
+    ],
+    "programsHandled": [
+      "Strength Training",
+      "Personal Training",
+      "Body Recomposition"
+    ],
+    "availability": "Morning & Evening"
+  },
+  {
+    "id": "Siddhesh Jadhav",
+    "name": "Siddhesh Jadhav",
+    "photo": "https://img.freepik.com/premium-photo/handsome-athletic-man-smiling-looking-camera-fitness-trainer-gym-jock_826801-5741.jpg?w=900",
+    "experience": "4+ years",
+    "experienceYears": 6,
+    "specialization": "Weight Loss & HIIT",
+    "bio": "Specializes in fat loss programs using functional training and high-intensity workouts to help members stay consistent and motivated.",
+    "bestFor": [
+      "Weight loss",
+      "Fat loss programs",
+      "Group training"
+    ],
+    "programsHandled": [
+      "Weight Loss Program",
+      "HIIT",
+      "Functional Training"
+    ],
+    "availability": "Morning & Evening"
+  },
+  {
+    "id": "amit-patel",
+    "name": "Amit Patel",
+    "photo": "https://img.freepik.com/premium-photo/young-black-personal-trainer-gym-smiling-with-crossed-arms_641878-387.jpg?w=996",
+    "experience": "8+ years",
+    "experienceYears": 6,
+    "specialization": "Cardio, Yoga & Mobility",
+    "bio": "Experienced in cardiovascular conditioning, yoga, and pilates with focus on flexibility, endurance, and overall wellness.",
+    "bestFor": [
+      "Cardio fitness",
+      "Flexibility",
+      "Recovery training"
+    ],
+    "programsHandled": [
+      "Cardio Training",
+      "Yoga",
+      "Pilates"
+    ],
+    "availability": "Morning & Evening"
+  }
+]

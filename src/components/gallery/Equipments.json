@@ -1,0 +1,59 @@
+{
+  "equipmentSections": [
+    {
+      "id": "gym",
+      "title": "Gym & Facilities",
+      "description": "Our gym features modern equipment, spacious workout zones, and a motivating environment for all fitness levels.",
+      "images": [
+        { "url": "https://i.pinimg.com/webp85/1200x/d3/48/bc/d348bc45d8b88b05db44826ab2be0c02.webp", "alt": "Modern gym facility with equipment" },
+        { "url": "https://i.pinimg.com/736x/b0/71/14/b0711414e8d2c640fbbc80ece6c3e34b.jpg", "alt": "Spacious gym floor" },
+        { "url": "https://i.pinimg.com/736x/18/e4/8b/18e48be433fb2c01ead51ccf3e1db0ca.jpg", "alt": "Functional training area" },
+        { "url": "https://i.pinimg.com/736x/d6/76/fd/d676fd68c7ca646e99f8f99fc4b870df.jpg", "alt": "Gym with cardio and strength machines" }
+      ]
+    },
+    {
+      "id": "cardio",
+      "title": "Cardio Equipment",
+      "description": "State-of-the-art cardio equipment to boost your endurance and heart health.",
+      "images": [
+        { "url": "https://i.pinimg.com/webp85/1200x/3c/86/ab/3c86ab6e736da987e6e446710ceee056.webp", "alt": "Treadmills in a gym" },
+        { "url": "https://i.pinimg.com/736x/aa/9d/f0/aa9df0e5f4abb05dee262c08356b64d1.jpg", "alt": "Row of elliptical machines" },
+        { "url": "https://i.pinimg.com/736x/8f/1b/f4/8f1bf49e9c0127a3dc49833787d56fc5.jpg", "alt": "Stationary bikes" },
+        { "url": "https://i.pinimg.com/1200x/02/c3/44/02c3448e6279b32fa7b1a0f38240dea2.jpg", "alt": "Cardio zone overview" }
+      ]
+    },
+    {
+      "id": "upper",
+      "title": "Upper Body",
+      "description": "Upper body machines and free weights for strength and muscle building.",
+      "images": [
+        { "url": "https://i.pinimg.com/1200x/99/06/64/990664f487f404fc1733ffac2f1ed921.jpg", "alt": "Chest press machine" },
+        { "url": "https://i.pinimg.com/736x/54/50/b2/5450b25a79a13b633141cfec53728229.jpg", "alt": "Lat pulldown machine" },
+        { "url": "https://i.pinimg.com/736x/b1/16/68/b11668e03f4ebd60703f32d5c061ff25.jpg", "alt": "Dumbbell rack for upper body" },
+        { "url": "https://i.pinimg.com/1200x/67/94/4d/67944d7e480438072dfdb191a68c94e1.jpg", "alt": "Shoulder press area" }
+      ]
+    },
+    {
+      "id": "lower",
+      "title": "Lower Body",
+      "description": "Lower body equipment for powerful legs and functional movement.",
+      "images": [
+        { "url": "https://i.pinimg.com/736x/72/52/1a/72521acc92df0ec332c2a76999a636b2.jpg", "alt": "Leg press machine" },
+        { "url": "https://i.pinimg.com/1200x/4f/e5/ab/4fe5ab09b2afd36c5640d157f38c1680.jpg", "alt": "Squat rack" },
+        { "url": "https://i.pinimg.com/1200x/fb/2d/7c/fb2d7cc1e1fb630ed730893c9f0a947a.jpg", "alt": "Hamstring curl machine" },
+        { "url": "https://i.pinimg.com/1200x/77/7a/24/777a2402e27caaeeac9fa372eed2300d.jpg", "alt": "Lower body training area" }
+      ]
+    },
+    {
+      "id": "dumbbells",
+      "title": "Dumbbells & Free Weights",
+      "description": "A full range of dumbbells and free weights for versatile training.",
+      "images": [
+        { "url": "https://i.pinimg.com/1200x/32/1a/0b/321a0bd2fde1172fe1718523a415eecc.jpg", "alt": "Dumbbells on rack" },
+        { "url": "https://i.pinimg.com/1200x/fd/52/ef/fd52ef2e203b444b2af1b157388e537a.jpg", "alt": "Free weights area" },
+        { "url": "https://i.pinimg.com/736x/76/1d/fa/761dfa02c533b16288dd2a55dbc2bd5b.jpg", "alt": "Barbells and plates" },
+        { "url": "https://i.pinimg.com/736x/ca/3a/30/ca3a306fbb25f22122f3f5a82249f77d.jpg", "alt": "Kettlebells and dumbbells" }
+      ]
+    }
+  ]
+}
