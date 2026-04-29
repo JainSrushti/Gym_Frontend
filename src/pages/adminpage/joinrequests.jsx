@@ -1,187 +1,192 @@
-import React, { useState, useEffect } from "react";
-import { CheckCircle, Clock } from "lucide-react";
+import { useState, useEffect } from "react";
+import { CheckCircle, Clock, Users } from "lucide-react";
 
-const statusStyles = {
-  Pending: {
-    color: "text-yellow-400 bg-yellow-500/10 border-yellow-500/20",
-    icon: Clock,
-  },
-  Approved: {
-    color: "text-green-400 bg-green-500/10 border-green-500/20",
-    icon: CheckCircle,
-  },
-};
+const API = "http://localhost:8080/api";
 
-function JoinRequests() {
-  const [requests, setRequests] = useState([]);
+function joinrequests() {
+  const [requests, setRequests]   = useState([]);
+  const [loading, setLoading]     = useState(true);
+  const [approving, setApproving] = useState(null); // id being approved
 
-  // ✅ Fetch join requests
-  const fetchRequests = async () => {
+  // ─── Fetch all requests ───────────────────────────────────────────────────
+  async function fetchRequests() {
     try {
-      const res = await fetch("http://localhost:8080/api/join");
+      const res = await fetch(`${API}/join`);
       const data = await res.json();
-
-      const formatted = data.map((item) => ({
-        ...item,
-        status: item.status || "Pending",
-        date: item.date || new Date().toISOString().split("T")[0],
-      })).reverse();
-
-      setRequests(formatted);
+      if (Array.isArray(data)) {
+        // Sort: Pending first, then by newest date
+        setRequests(data.sort((a, b) => {
+          if (a.status === "Pending" && b.status !== "Pending") return -1;
+          if (a.status !== "Pending" && b.status === "Pending") return 1;
+          return new Date(b.createdAt || 0) - new Date(a.createdAt || 0);
+        }));
+      }
     } catch (err) {
-      console.error("Error fetching join requests:", err);
+      console.error("Failed to fetch join requests", err);
     }
-  };
+    setLoading(false);
+  }
 
   useEffect(() => {
     fetchRequests();
   }, []);
 
-  // ✅ Approve and save in DB
-  const updateStatus = async (id) => {
+  // ─── Approve handler ──────────────────────────────────────────────────────
+  async function handleApprove(id) {
+    setApproving(id);
     try {
-      const response = await fetch(
-        `http://localhost:8080/api/join/${id}/approve`,
-        {
-          method: "PUT",
-        }
-      );
+      const res = await fetch(`${API}/approve/${id}`, { method: "PUT" });
+      if (!res.ok) throw new Error("Approve failed");
 
-      if (!response.ok) {
-        throw new Error("Failed to approve");
-      }
-
-      const updated = await response.json();
-
+      // ✅ Update status in UI immediately without full reload
       setRequests((prev) =>
-        prev.map((r) => r.id === id ? { ...r, status: updated.status } : r)
+        prev.map((r) => (r.id === id ? { ...r, status: "Approved" } : r))
       );
-      // notify layout to refresh badge count
-      window.dispatchEvent(new Event("refreshAdminCounts"));
-    } catch (error) {
-      console.error("Approve failed:", error);
-    }
-  };
 
-  const counts = {
-    total: requests.length,
-    pending: requests.filter((r) => r.status === "Pending").length,
-    approved: requests.filter((r) => r.status === "Approved").length,
-  };
+      // ✅ Trigger sidebar count refresh
+      window.dispatchEvent(new Event("refreshAdminCounts"));
+    } catch (err) {
+      alert("Failed to approve request. Please try again.");
+      console.error(err);
+    }
+    setApproving(null);
+  }
+
+  // ─── Counts ───────────────────────────────────────────────────────────────
+  const total    = requests.length;
+  const pending  = requests.filter((r) => r.status === "Pending").length;
+  const approved = requests.filter((r) => r.status === "Approved").length;
+
+  if (loading) {
+    return (
+      <div className="text-white text-center py-20 animate-pulse">
+        Loading join requests...
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div>
-        <h2 className="text-white text-xl font-bold">
-          Join Requests
-        </h2>
-        <p className="text-gray-500 text-sm">
-          {counts.total} total requests
-        </p>
-      </div>
 
-      {/* Stats */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-        {[
-          { label: "Total", value: counts.total, color: "text-white" },
-          {
-            label: "Pending",
-            value: counts.pending,
-            color: "text-yellow-400",
-          },
-          {
-            label: "Approved",
-            value: counts.approved,
-            color: "text-green-400",
-          },
-        ].map((s) => (
-          <div
-            key={s.label}
-            className="bg-[#111] border border-gray-800 rounded-xl px-5 py-4"
-          >
-            <p className="text-gray-500 text-xs">{s.label}</p>
-            <p className={`text-2xl font-bold mt-1 ${s.color}`}>
-              {s.value}
-            </p>
+      {/* ── Stats Cards ── */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div className="bg-[#0a0a0a] border border-white/10 rounded-xl p-5 flex items-center gap-4">
+          <div className="w-10 h-10 rounded-full bg-blue-600/20 flex items-center justify-center">
+            <Users size={18} className="text-blue-400" />
           </div>
-        ))}
+          <div>
+            <p className="text-gray-400 text-xs">Total Requests</p>
+            <p className="text-white text-2xl font-bold">{total}</p>
+          </div>
+        </div>
+
+        <div className="bg-[#0a0a0a] border border-white/10 rounded-xl p-5 flex items-center gap-4">
+          <div className="w-10 h-10 rounded-full bg-yellow-600/20 flex items-center justify-center">
+            <Clock size={18} className="text-yellow-400" />
+          </div>
+          <div>
+            <p className="text-gray-400 text-xs">Pending</p>
+            <p className="text-white text-2xl font-bold">{pending}</p>
+          </div>
+        </div>
+
+        <div className="bg-[#0a0a0a] border border-white/10 rounded-xl p-5 flex items-center gap-4">
+          <div className="w-10 h-10 rounded-full bg-green-600/20 flex items-center justify-center">
+            <CheckCircle size={18} className="text-green-400" />
+          </div>
+          <div>
+            <p className="text-gray-400 text-xs">Approved</p>
+            <p className="text-white text-2xl font-bold">{approved}</p>
+          </div>
+        </div>
       </div>
 
-      {/* Table */}
-      <div className="bg-[#111] border border-gray-800 rounded-xl overflow-hidden">
-        <table className="w-full text-sm">
-          <thead>
-            <tr className="border-b border-gray-800 text-gray-400 text-xs uppercase">
-              <th className="px-5 py-3 text-left">Name</th>
-              <th className="px-5 py-3 text-left hidden sm:table-cell">
-                Phone
-              </th>
-              <th className="px-5 py-3 text-left hidden md:table-cell">
-                Program
-              </th>
-              <th className="px-5 py-3 text-left hidden lg:table-cell">
-                Date
-              </th>
-              <th className="px-5 py-3 text-left">Status</th>
-              <th className="px-5 py-3 text-right">Actions</th>
-            </tr>
-          </thead>
+      {/* ── Table ── */}
+      <div className="bg-[#0a0a0a] border border-white/10 rounded-xl overflow-hidden">
+        <div className="px-6 py-4 border-b border-white/10">
+          <h2 className="text-white font-semibold text-lg">All Join Requests</h2>
+        </div>
 
-          <tbody className="divide-y divide-gray-800">
-            {requests.map((r) => {
-              const { color, icon: Icon } =
-                statusStyles[r.status] || statusStyles.Pending;
+        {requests.length === 0 ? (
+          <p className="text-center text-gray-500 py-12">No requests yet.</p>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="bg-white/5 text-gray-400 uppercase text-xs">
+                  <th className="px-5 py-3 text-left">#</th>
+                  <th className="px-5 py-3 text-left">Name</th>
+                  <th className="px-5 py-3 text-left">Phone</th>
+                  <th className="px-5 py-3 text-left">Program</th>
+                  <th className="px-5 py-3 text-left">Date</th>
+                  <th className="px-5 py-3 text-left">Status</th>
+                  <th className="px-5 py-3 text-left">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {requests.map((req, i) => (
+                  <tr
+                    key={req.id}
+                    className="border-t border-white/5 hover:bg-white/[0.02] transition"
+                  >
+                    <td className="px-5 py-4 text-gray-500">{i + 1}</td>
 
-              return (
-                <tr
-                  key={r.id}
-                  className="hover:bg-gray-800/30 transition"
-                >
-                  <td className="px-5 py-4 text-white font-medium">
-                    {r.name}
-                  </td>
+                    <td className="px-5 py-4 text-white font-medium">{req.name}</td>
 
-                  <td className="px-5 py-4 text-gray-400 hidden sm:table-cell">
-                    {r.phone}
-                  </td>
+                    <td className="px-5 py-4 text-gray-300">{req.phone}</td>
 
-                  <td className="px-5 py-4 text-gray-400 hidden md:table-cell">
-                    {r.program}
-                  </td>
+                    <td className="px-5 py-4 text-gray-300">{req.program}</td>
 
-                  <td className="px-5 py-4 text-gray-400 hidden lg:table-cell">
-                    {r.date}
-                  </td>
+                    <td className="px-5 py-4 text-gray-500 text-xs">
+                      {req.createdAt
+                        ? new Date(req.createdAt).toLocaleDateString("en-IN", {
+                            day: "2-digit", month: "short", year: "numeric",
+                          })
+                        : "—"}
+                    </td>
 
-                  <td className="px-5 py-4">
-                    <span
-                      className={`inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full border ${color}`}
-                    >
-                      <Icon size={11} /> {r.status}
-                    </span>
-                  </td>
+                    {/* ── Status Badge ── */}
+                    <td className="px-5 py-4">
+                      <span
+                        className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                          req.status === "Approved"
+                            ? "bg-green-600/20 text-green-400"
+                            : "bg-yellow-600/20 text-yellow-400"
+                        }`}
+                      >
+                        {req.status}
+                      </span>
+                    </td>
 
-                  <td className="px-5 py-4">
-                    <div className="flex justify-end">
-                      {r.status !== "Approved" && (
+                    {/* ── Approve Button ── */}
+                    <td className="px-5 py-4">
+                      {req.status === "Approved" ? (
+                        <span className="text-green-500 text-xs font-semibold flex items-center gap-1">
+                          <CheckCircle size={14} /> Approved
+                        </span>
+                      ) : (
                         <button
-                          onClick={() => updateStatus(r.id)}
-                          className="text-green-400 hover:text-white hover:bg-green-600 border border-green-600/30 px-3 py-1.5 rounded-lg text-xs transition"
+                          onClick={() => handleApprove(req.id)}
+                          disabled={approving === req.id}
+                          className={`px-4 py-1.5 rounded text-xs font-semibold transition ${
+                            approving === req.id
+                              ? "bg-gray-700 text-gray-400 cursor-not-allowed"
+                              : "bg-green-600 hover:bg-green-700 text-white"
+                          }`}
                         >
-                          Approve
+                          {approving === req.id ? "Approving..." : "Approve"}
                         </button>
                       )}
-                    </div>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
     </div>
   );
 }
 
-export default JoinRequests;
+export default joinrequests;

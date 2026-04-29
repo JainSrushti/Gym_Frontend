@@ -67,8 +67,15 @@ function AdminSidebar({ isOpen, setIsOpen, counts = {} }) {
                 <item.icon size={19} className={active ? "text-white" : "text-gray-500 group-hover:text-red-400"} />
                 <span className="font-medium text-sm flex-1">{item.label}</span>
 
-                {/* Badge */}
-                {count > 0 && (
+                {/* Red dot with count for pending trainer apps */}
+                {item.countKey === "trainerApps" && count > 0 && (
+                  <span className="min-w-[20px] h-5 px-1.5 flex items-center justify-center bg-red-500 text-white text-xs font-bold rounded-full animate-pulse">
+                    {count}
+                  </span>
+                )}
+
+                {/* Number badge for others */}
+                {item.countKey !== "trainerApps" && count > 0 && (
                   <span className="min-w-[20px] h-5 px-1.5 flex items-center justify-center bg-red-600 text-white text-xs font-bold rounded-full">
                     {count}
                   </span>

@@ -27,7 +27,7 @@ function AdminLogin() {
     const data = await res.json();
 
     localStorage.setItem("adminAuth", "true");
-    localStorage.setItem("adminEmail", data.email); // 🔥 important
+    localStorage.setItem("adminEmail", data.email || form.email);
     navigate("/adminpage/dashboard");
 
   } catch {

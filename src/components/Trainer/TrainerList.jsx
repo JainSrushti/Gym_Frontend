@@ -36,12 +36,14 @@ const DEFAULT_TRAINERS = [
   },
 ];
 
-// export function loadTrainers() {
-//   try {
-//     const s = localStorage.getItem("admin_trainers");
-//     return s ? JSON.parse(s) : DEFAULT_TRAINERS;
-//   } catch { return DEFAULT_TRAINERS; }
-// }
+export function loadTrainers() {
+  try {
+    const s = localStorage.getItem("admin_trainers");
+    return s ? JSON.parse(s) : DEFAULT_TRAINERS;
+  } catch {
+    return DEFAULT_TRAINERS;
+  }
+}
 
 function toArray(val) {
   if (Array.isArray(val)) return val;
@@ -83,36 +85,53 @@ function TrainerCard({ trainer }) {
         className="overflow-y-auto border-t border-white/10"
       >
         <div className="px-5 py-4 space-y-3">
-          <p className="text-sm text-gray-300">
-            <span className="text-white font-medium">Availability:</span> {trainer.availability}
-          </p>
+  <p className="text-sm text-gray-300">
+    <span className="text-white font-medium">Availability:</span>{" "}
+    {trainer.availability}
+  </p>
 
-          {trainer.bio && (
-            <p className="text-gray-400 text-xs leading-relaxed">{trainer.bio}</p>
-          )}
+  {trainer.bio && (
+    <p className="text-gray-400 text-xs leading-relaxed">
+      {trainer.bio}
+    </p>
+  )}
 
-          {bestFor.length > 0 && (
-            <div>
-              <p className="text-white text-xs font-semibold mb-1">Best For</p>
-              <div className="flex flex-wrap gap-1">
-                {bestFor.map((item, i) => (
-                  <span key={i} className="bg-red-600/20 text-red-400 text-xs px-2 py-0.5 rounded">{item}</span>
-                ))}
-              </div>
-            </div>
-          )}
+  {/* Best For (string safe) */}
+  {trainer.bestFor && (
+    <div>
+      <p className="text-white text-xs font-semibold mb-1">Best For</p>
+      <div className="flex flex-wrap gap-1">
+        {trainer.bestFor.split(",").map((item, i) => (
+          <span
+            key={i}
+            className="bg-red-600/20 text-red-400 text-xs px-2 py-0.5 rounded"
+          >
+            {item.trim()}
+          </span>
+        ))}
+      </div>
+    </div>
+  )}
 
-          {programs.length > 0 && (
-            <div>
-              <p className="text-white text-xs font-semibold mb-1">Programs</p>
-              <div className="flex flex-wrap gap-1">
-                {programs.map((p, i) => (
-                  <span key={i} className="bg-white/10 text-gray-300 text-xs px-2 py-0.5 rounded">{p}</span>
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
+  {/* Programs (string safe) */}
+  {trainer.programsHandled && (
+    <div>
+      <p className="text-white text-xs font-semibold mb-1">
+        Programs
+      </p>
+      <div className="flex flex-wrap gap-1">
+        {trainer.programsHandled.split(",").map((p, i) => (
+          <span
+            key={i}
+            className="bg-white/10 text-gray-300 text-xs px-2 py-0.5 rounded"
+          >
+            {p.trim()}
+          </span>
+        ))}
+      </div>
+    </div>
+  )}
+</div>
       </div>
     </div>
   );

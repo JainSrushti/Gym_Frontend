@@ -13,7 +13,7 @@ const pageTitles = {
   "/adminpage/settings":    "Settings",
   "/adminpage/joinrequests": "Join Requests",
   "/adminpage/offers":       "Offers",
-  "/adminpage/offers":       "Offers",
+ 
 };
 
 function AdminNavbar({ setIsOpen }) {

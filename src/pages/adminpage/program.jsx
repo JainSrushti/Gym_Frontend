@@ -144,7 +144,7 @@ function ProgramAdmin() {
 
               {p.benefits && (
                 <ul className="space-y-1 mb-3">
-                  {p.benefits.split(",").slice(0, 3).map((b, i) => (
+                  {(Array.isArray(p.benefits) ? p.benefits : p.benefits.split(",")).slice(0, 3).map((b, i) => (
                     <li key={i} className="flex items-center gap-1.5 text-gray-400 text-xs">
                       <span className="w-1.5 h-1.5 rounded-full bg-red-500 shrink-0" />
                       {b.trim()}

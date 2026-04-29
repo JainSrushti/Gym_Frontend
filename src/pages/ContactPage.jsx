@@ -21,6 +21,7 @@ function ContactPage() {
 
   const handleSubmit = async (e) => {
   e.preventDefault();
+  if (phone.length !== 10) return;
 
   const enquiryData = {
     name,
@@ -143,18 +144,26 @@ function ContactPage() {
                          text-white placeholder-white/40 focus:outline-none focus:border-red-600"
             />
 
-            <label className="block text-white/70 text-sm mb-2">
-              Phone Number
-            </label>
+            <label className="block text-white/70 text-sm mb-2">Phone Number</label>
             <input
               type="tel"
               required
+              maxLength={10}
+              pattern="[0-9]{10}"
               value={phone}
-              onChange={(e) => setPhone(e.target.value)}
+              onChange={(e) => {
+                const val = e.target.value.replace(/\D/g, "").slice(0, 10);
+                setPhone(val);
+              }}
               placeholder="10-digit phone number"
-              className="w-full mb-4 px-4 py-3 rounded bg-black border border-white/20
-                         text-white placeholder-white/40 focus:outline-none focus:border-red-600"
+              className={`w-full mb-1 px-4 py-3 rounded bg-black border text-white placeholder-white/40 focus:outline-none focus:border-red-600 ${
+                phone.length > 0 && phone.length < 10 ? "border-red-500" : "border-white/20"
+              }`}
             />
+            {phone.length > 0 && phone.length < 10 && (
+              <p className="text-red-400 text-xs mb-3">Enter a valid 10-digit mobile number</p>
+            )}
+            {!(phone.length > 0 && phone.length < 10) && <div className="mb-4" />}
 
             <label className="block text-white/70 text-sm mb-2">
               Enquiry Type
@@ -177,10 +186,11 @@ function ContactPage() {
             </select>
 
             <label className="block text-white/70 text-sm mb-2">
-              Message (optional)
+              Message
             </label>
             <textarea
               rows="4"
+              required
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               placeholder="Tell us what you are looking for"

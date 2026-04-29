@@ -25,13 +25,13 @@ function OfferCard({ offer, visible }) {
       </div>
 
       {/* Default content */}
-      <div className="p-5 pt-6">
+      <div className="p-5 pt-6 h-44 flex flex-col">
         <div className="flex items-center gap-2 mb-3">
           <span className="text-2xl">{offer.icon}</span>
           <span className="text-red-400 text-sm font-bold tracking-widest">{offer.title}</span>
         </div>
         <div className="h-px bg-gradient-to-r from-red-600/50 to-transparent mb-3" />
-        <p className="text-white/55 text-xs leading-relaxed">{offer.desc}</p>
+        <p className="text-white/55 text-xs leading-relaxed line-clamp-3 flex-1">{offer.desc}</p>
         <a
           href={`/contact?offer=${encodeURIComponent(offer.title)}`}
           className="block mt-2 w-full text-center border border-white/20 hover:border-red-500 text-white/60 hover:text-white text-xs py-1.5 rounded-lg transition duration-300"

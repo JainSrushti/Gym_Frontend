@@ -3,7 +3,6 @@ import { Link, useParams } from "react-router-dom";
 
 const API_URL = "http://localhost:8080/api/gym-trainers";
 
-
 async function loadTrainers() {
   try {
     const res = await fetch(API_URL);
@@ -28,68 +27,51 @@ function TrainerCard({ trainer }) {
 
       {/* Normal Card */}
       <div className="p-5">
-        <h3 className="text-xl font-bold text-white mb-3">{trainer.name}</h3>
-        <div className="space-y-1.5">
-          <p className="text-xs text-gray-500 uppercase tracking-widest">Specialization</p>
-          <p className="text-red-400 text-sm font-medium">{trainer.specialization}</p>
-        </div>
-        <div className="space-y-1.5 mt-3">
-          <p className="text-xs text-gray-500 uppercase tracking-widest">Experience Year</p>
-          <p className="text-white/70 text-sm">{trainer.experience}</p>
-        </div>
-        <div className="space-y-1.5 mt-3">
-          <p className="text-xs text-gray-500 uppercase tracking-widest">Availability</p>
-          <p className="text-white/70 text-sm">{trainer.availability}</p>
-        </div>
+        <h3 className="text-xl font-bold text-white">{trainer.name}</h3>
+        <p className="text-red-400 text-sm font-medium mt-1">{trainer.specialty}</p>
+        <p className="text-gray-400 text-sm mt-1">{trainer.experience}</p>
+        <p className="text-gray-500 text-sm mt-1">{trainer.availability}</p>
       </div>
 
       {/* Hover Card */}
       <div className="absolute inset-0 bg-black/90 flex flex-col justify-end p-6 translate-y-full group-hover:translate-y-0 transition-transform duration-500 overflow-y-auto">
-        <h3 className="text-xl font-bold text-white mb-1">
-          {trainer.name}
-        </h3>
-
-        <p className="text-red-400 text-sm font-semibold mb-3">
-          {trainer.specialization}
-        </p>
+        <h3 className="text-xl font-bold text-white mb-1">{trainer.name}</h3>
+        <p className="text-red-400 text-sm font-semibold mb-3">{trainer.specialty}</p>
 
         <div className="space-y-2 mb-4">
           <div className="flex items-center gap-2 text-sm text-gray-300">
             <span className="text-red-500 font-bold">⏱</span>
-            <span>{trainer.experience} years of experience</span>
+            <span>{trainer.experience} of experience</span>
           </div>
-
           <div className="flex items-center gap-2 text-sm text-gray-300">
             <span className="text-red-500 font-bold">🕐</span>
-            <span> Availability: {trainer.availability}</span>
+            <span>Availability: {trainer.availability}</span>
           </div>
         </div>
 
-        <p className="text-gray-400 text-sm leading-relaxed mb-3">
-          {trainer.bio}
-        </p>
+        <p className="text-gray-400 text-sm leading-relaxed mb-3">{trainer.bio}</p>
 
-        <p className="text-white text-sm">
-          <span className="font-semibold text-red-500">Best For:</span>{" "}
-          {trainer.bestFor}
-        </p>
+        {trainer.bestFor && (
+          <p className="text-white text-sm">
+            <span className="font-semibold text-red-500">Best For:</span> {trainer.bestFor}
+          </p>
+        )}
 
-        <p className="text-white text-sm mt-2">
-          <span className="font-semibold text-red-500">Programs can handle:</span>{" "}
-          {trainer.programsHandled}
-        </p>
+        {trainer.programsHandled && (
+          <p className="text-white text-sm mt-2">
+            <span className="font-semibold text-red-500">Programs:</span> {trainer.programsHandled}
+          </p>
+        )}
 
-        <br /> 
-          
-       <a
-  href={`https://wa.me/91${trainer.phoneNumber || trainer.phone}?text=Hi%20${encodeURIComponent(trainer.name)},%20I%20found%20you%20on%20the%20PowerGYM%20website.%20I%20have%20an%20enquiry%20about%20your%20training%20sessions.%20Could%20you%20please%20share%20more%20details%3F`}
-  target="_blank"
-  rel="noopener noreferrer"
-  className="inline-block bg-green-600 text-white text-center px-3 py-1.5 text-sm rounded-md hover:bg-green-700 transition mr-3"
->
-  Talk to Trainer
-</a>
-        
+        <br />
+        <a
+          href={`https://wa.me/91${trainer.phoneNumber}?text=Hi%20${encodeURIComponent(trainer.name)},%20I%20want%20to%20talk%20about%20training.`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-block bg-green-600 text-white text-center px-3 py-1.5 text-sm rounded-md hover:bg-green-700 transition mr-3"
+        >
+          Talk to Trainer
+        </a>
       </div>
     </div>
   );
@@ -108,7 +90,7 @@ function Hero() {
           <p className="text-white/75 text-lg leading-relaxed">
             Our certified trainers are committed to your progress. With structured programs,
             personalized attention, and disciplined coaching, they help you train smarter and
-            achieve real results — whether you're just starting out or pushing for peak performance.
+            achieve real results.
           </p>
           <div className="flex flex-wrap gap-4 pt-4">
             <a href="#trainers" className="bg-red-600 px-6 py-3 rounded font-semibold hover:bg-red-700 transition">
@@ -135,15 +117,24 @@ function Hero() {
 // ─── TrainerList ──────────────────────────────────────────────────────────────
 function TrainerList() {
   const [filter, setFilter] = useState("All");
-const [trainers, setTrainers] = useState([]);
- useEffect(() => {
-  loadTrainers().then((data) => setTrainers(data));
-}, []);
+  const [trainers, setTrainers] = useState([]);
+
+  // ✅ FIXED: Always fetch from API, never localStorage
+  useEffect(() => {
+    loadTrainers().then((data) => setTrainers(data));
+  }, []);
+
   const filters = ["All", "2+ Years", "4+ Years", "6+ Years"];
 
+  const parseYears = (exp) => {
+    if (!exp) return 0;
+    const match = String(exp).match(/\d+/);
+    return match ? parseInt(match[0]) : 0;
+  };
+
   const filtered = trainers.filter((t) => {
+    const years = parseYears(t.experience || t.experienceYears);
     if (filter === "All") return true;
-    const years = t.experienceYears || parseInt(t.experience) || 0;
     if (filter === "2+ Years") return years >= 2;
     if (filter === "4+ Years") return years >= 4;
     if (filter === "6+ Years") return years >= 6;
@@ -175,11 +166,16 @@ const [trainers, setTrainers] = useState([]);
             </button>
           ))}
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filtered.map((trainer) => (
-            <TrainerCard key={trainer.id} trainer={trainer} />
-          ))}
-        </div>
+
+        {filtered.length === 0 ? (
+          <p className="text-center text-white/50">No trainers found.</p>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {filtered.map((trainer) => (
+              <TrainerCard key={trainer.id} trainer={trainer} />
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );
@@ -236,20 +232,20 @@ function ClientReview() {
 
 // ─── JobForm ──────────────────────────────────────────────────────────────────
 function JobForm() {
-  const [form, setForm] = useState({ name: "", email: "", phone: "", specialization: "", experience: "" });
+  const [form, setForm] = useState({ name: "", email: "", phone: "", specialty: "", experience: "" });
   const [submitted, setSubmitted] = useState(false);
 
   async function handleSubmit(e) {
     e.preventDefault();
     try {
-      const res = await fetch("http://localhost:8080/api/trainers", {
+      const res = await fetch("http://localhost:8080/api/trainer-applications", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
       });
       if (!res.ok) throw new Error();
       setSubmitted(true);
-      setForm({ name: "", email: "", phone: "", specialization: "", experience: "" });
+      setForm({ name: "", email: "", phone: "", specialty: "", experience: "" });
     } catch {
       console.error("Submit failed");
     }
@@ -274,55 +270,34 @@ function JobForm() {
               <button onClick={() => setSubmitted(false)} className="block w-full text-white/40 hover:text-white text-xs mt-2 transition">Submit another</button>
             </div>
           ) : (
-          <>
-          <span className="text-red-600 font-semibold tracking-widest block mb-2">CAREERS</span>
-          <h2 className="text-3xl font-bold text-white mb-6">Apply as a Trainer</h2>
-          <p className="text-white/70 mb-8">
-            Join Power GYM as a certified trainer and help members achieve real, sustainable fitness results.
-          </p>
-          <form onSubmit={handleSubmit} className="space-y-5">
-            {[
-              { label: "Full Name",            key: "name",           type: "text" },
-              { label: "Email Address",        key: "email",          type: "email" },
-              { label: "Specialization",       key: "specialization", type: "text" },
-              { label: "Years of Experience",  key: "experience",     type: "text" },
-            ].map(({ label, key, type }) => (
-              <div key={key}>
-                <label className="block text-sm text-white/80 mb-2">{label}</label>
-                <input
-                  type={type} value={form[key]} required
-                  onChange={(e) => setForm({ ...form, [key]: e.target.value })}
-                  className="w-full p-3 rounded bg-black border border-white/20 text-white focus:outline-none focus:border-red-600"
-                />
-              </div>
-            ))}
-            <div>
-              <label className="block text-sm text-white/80 mb-2">Phone Number</label>
-              <input
-                type="tel"
-                value={form.phone}
-                required
-                maxLength={10}
-                pattern="[0-9]{10}"
-                title="Please enter a valid 10-digit mobile number"
-                onChange={(e) => {
-                  const val = e.target.value.replace(/\D/g, "").slice(0, 10);
-                  setForm({ ...form, phone: val });
-                }}
-                className={`w-full p-3 rounded bg-black border text-white focus:outline-none focus:border-red-600 ${
-                  form.phone.length > 0 && form.phone.length < 10 ? "border-red-500" : "border-white/20"
-                }`}
-                placeholder="10-digit mobile number"
-              />
-              {form.phone.length > 0 && form.phone.length < 10 && (
-                <p className="text-red-400 text-xs mt-1">Enter a valid 10-digit mobile number</p>
-              )}
-            </div>
-            <button type="submit" className="w-full bg-red-600 text-white font-semibold py-3 rounded hover:bg-red-700 transition">
-              Submit Application
-            </button>
-          </form>
-          </>
+            <>
+              <span className="text-red-600 font-semibold tracking-widest block mb-2">CAREERS</span>
+              <h2 className="text-3xl font-bold text-white mb-6">Apply as a Trainer</h2>
+              <p className="text-white/70 mb-8">
+                Join Power GYM as a certified trainer and help members achieve real, sustainable fitness results.
+              </p>
+              <form onSubmit={handleSubmit} className="space-y-5">
+                {[
+                  { label: "Full Name",           key: "name",       type: "text" },
+                  { label: "Email Address",        key: "email",      type: "email" },
+                  { label: "Phone Number",         key: "phone",      type: "tel" },
+                  { label: "Specialization",       key: "specialty",  type: "text" },
+                  { label: "Years of Experience",  key: "experience", type: "text" },
+                ].map(({ label, key, type }) => (
+                  <div key={key}>
+                    <label className="block text-sm text-white/80 mb-2">{label}</label>
+                    <input
+                      type={type} value={form[key]} required
+                      onChange={(e) => setForm({ ...form, [key]: e.target.value })}
+                      className="w-full p-3 rounded bg-black border border-white/20 text-white focus:outline-none focus:border-red-600"
+                    />
+                  </div>
+                ))}
+                <button type="submit" className="w-full bg-red-600 text-white font-semibold py-3 rounded hover:bg-red-700 transition">
+                  Submit Application
+                </button>
+              </form>
+            </>
           )}
         </div>
       </div>
@@ -333,13 +308,14 @@ function JobForm() {
 // ─── TrainerDetails ───────────────────────────────────────────────────────────
 function TrainerDetails() {
   const { id } = useParams();
-const [trainer, setTrainer] = useState(null);
-useEffect(() => {
-  loadTrainers().then((data) => {
-    const found = data.find((t) => String(t.id) === String(id));
-    setTrainer(found);
-  });
-}, [id]);
+  const [trainer, setTrainer] = useState(null);
+
+  useEffect(() => {
+    loadTrainers().then((data) => {
+      const found = data.find((t) => String(t.id) === String(id));
+      setTrainer(found);
+    });
+  }, [id]);
 
   if (!trainer) {
     return (
@@ -359,126 +335,14 @@ useEffect(() => {
           <div className="md:col-span-2">
             <span className="text-red-600 font-semibold tracking-widest">TRAINER PROFILE</span>
             <h1 className="text-4xl font-bold text-white mt-4 mb-4">{trainer.name}</h1>
-            <p className="text-white/70 mb-2"><span className="text-white font-medium">Specialization:</span> {trainer.specialization}</p>
+            <p className="text-white/70 mb-2"><span className="text-white font-medium">Specialization:</span> {trainer.specialty}</p>
             <p className="text-white/70 mb-6"><span className="text-white font-medium">Experience:</span> {trainer.experience}</p>
             <p className="text-white/70 text-lg leading-relaxed">{trainer.bio}</p>
           </div>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mb-16">
-          <div className="border border-white/10 rounded-xl p-6">
-            <h2 className="text-xl font-semibold text-white mb-4">Best For</h2>
-            <ul className="space-y-2 text-white/70">{trainer.bestFor.map((item, i) => <li key={i}>• {item}</li>)}</ul>
-          </div>
-          <div className="border border-white/10 rounded-xl p-6">
-            <h2 className="text-xl font-semibold text-white mb-4">Programs Handled</h2>
-            <ul className="space-y-2 text-white/70">{trainer.programsHandled.map((p, i) => <li key={i}>• {p}</li>)}</ul>
-          </div>
-        </div>
-        <div className="border border-white/10 rounded-xl p-6 mb-16">
-          <h2 className="text-xl font-semibold text-white mb-3">Availability</h2>
-          <p className="text-white/70">{trainer.availability}</p>
-        </div>
         <Link to="/programs" className="border border-white/20 text-white px-8 py-3 rounded hover:border-red-600 transition">
           View Programs
         </Link>
-      </div>
-    </section>
-  );
-}
-
-// ─── TrainerEnquiryForm ───────────────────────────────────────────────────────
-function TrainerEnquiryForm() {
-  const { id } = useParams();
- const [trainers, setTrainers] = useState([]);
-const [trainer, setTrainer] = useState(null);
-
-// 1️⃣ Load all trainers
-useEffect(() => {
-  loadTrainers().then((data) => {
-    if (Array.isArray(data)) {
-      setTrainers(data);
-    } else {
-      setTrainers([]);
-    }
-  });
-}, []);
-
-// 2️⃣ Find selected trainer when trainers OR id changes
-useEffect(() => {
-  if (!Array.isArray(trainers)) return;
-
-  const found = trainers.find(
-    (t) => String(t.id) === String(id)
-  );
-
-  setTrainer(found || null);
-}, [id, trainers]);
-
-  const [form, setForm] = useState({ name: "", phone: "", email: "", message: "" });
-  const [submitted, setSubmitted] = useState(false);
-
-  if (!trainer) {
-    return (
-      <section className="min-h-screen bg-black flex items-center justify-center text-white">
-        <p>Trainer not found.</p>
-      </section>
-    );
-  }
-
-  return (
-    <section className="bg-black py-24 px-6 select-none">
-      <div className="max-w-4xl mx-auto">
-        {!submitted ? (
-          <>
-            <div className="text-center mb-12">
-              <span className="text-red-600 font-semibold tracking-widest">TRAINER ENQUIRY</span>
-              <h1 className="text-4xl font-bold text-white mt-4 mb-4">Talk to {trainer.name}</h1>
-              <p className="text-white/70 text-lg">Share your details and our team will help connect you with the trainer.</p>
-            </div>
-            <form onSubmit={(e) => { e.preventDefault(); setSubmitted(true); }} className="border border-white/10 rounded-xl p-8 space-y-6">
-              <div>
-                <label className="block text-white/80 mb-2 text-sm">Selected Trainer</label>
-                <input type="text" value={trainer.name} readOnly className="w-full p-3 rounded bg-black border border-white/20 text-white cursor-not-allowed" />
-              </div>
-              {[
-                { label: "Full Name",        key: "name",    type: "text",  required: true },
-                { label: "Phone Number",     key: "phone",   type: "tel",   required: true },
-                { label: "Email (optional)", key: "email",   type: "email", required: false },
-              ].map(({ label, key, type, required }) => (
-                <div key={key}>
-                  <label className="block text-white/80 mb-2 text-sm">{label}</label>
-                  <input type={type} required={required} value={form[key]}
-                    onChange={(e) => setForm({ ...form, [key]: e.target.value })}
-                    className="w-full p-3 rounded bg-black border border-white/20 text-white focus:outline-none focus:border-red-600" />
-                </div>
-              ))}
-              <div>
-                <label className="block text-white/80 mb-2 text-sm">Message (optional)</label>
-                <textarea rows="4" value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })}
-                  placeholder="Tell us your goals or preferred timing"
-                  className="w-full p-3 rounded bg-black border border-white/20 text-white placeholder-white/40 focus:outline-none focus:border-red-600" />
-              </div>
-              <button type="submit" className="w-full bg-red-600 text-white py-3 rounded font-semibold hover:bg-red-700 transition">
-                Submit Enquiry
-              </button>
-            </form>
-          </>
-        ) : (
-          <div className="text-center border border-white/10 rounded-xl p-12">
-            <h2 className="text-3xl font-bold text-white mb-4">Enquiry Submitted</h2>
-            <p className="text-white/70 mb-8">Thank you! Our team will contact you shortly regarding <strong>{trainer.name}</strong>.</p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a href={`https://wa.me/919876543210?text=Hi%20Power%20GYM,%20I%20want%20to%20talk%20to%20${encodeURIComponent(trainer.name)}.`}
-                target="_blank" rel="noopener noreferrer"
-                className="border border-green-600 text-green-500 px-6 py-3 rounded font-semibold hover:bg-green-600 hover:text-white transition">
-                WhatsApp Enquiry
-              </a>
-              <Link to="/programs" className="border border-white/20 text-white px-6 py-3 rounded hover:border-red-600 transition">
-                View Programs
-              </Link>
-            </div>
-          </div>
-        )}
       </div>
     </section>
   );
@@ -496,5 +360,5 @@ function Trainer() {
   );
 }
 
-export { TrainerDetails, TrainerEnquiryForm };
+export { TrainerDetails };
 export default Trainer;

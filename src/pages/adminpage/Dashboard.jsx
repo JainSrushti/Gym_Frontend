@@ -82,7 +82,7 @@ function Dashboard() {
       fetch(ENQUIRIES_API).then(r => r.json()),
       fetch(OFFERS_API).then(r => r.json()),
       fetch(MEMBERSHIP_API).then(r => r.json()),
-      fetch("http://localhost:8080/api/timetable/weekly").then(r => r.json()),
+      fetch("http://localhost:8080/api/timetable").then(r => r.json()),
     ]).then(([t, p, a, j, e, o, m, tt]) => {
       if (t.status  === "fulfilled") setTrainers(Array.isArray(t.value)     ? t.value  : []);
       if (p.status  === "fulfilled") setPrograms(Array.isArray(p.value)     ? p.value  : []);
@@ -128,7 +128,10 @@ function Dashboard() {
         <SectionCard title="Pending Trainer Applications" icon={MessageSquare} count={newApps} countLabel="pending" loading={loading}>
           {applications.filter(a => a.status === "Pending").length === 0
             ? <EmptyRow text="No pending applications" />
-            : applications.filter(a => a.status === "Pending").map((a, i) => (
+            : [...applications]
+                .filter(a => a.status === "Pending")
+                .sort((a, b) => (b.id - a.id) || new Date(b.createdAt || 0) - new Date(a.createdAt || 0))
+                .map((a, i) => (
               <div key={i} className="px-5 py-3.5 flex items-center justify-between hover:bg-gray-800/30 transition">
                 <div>
                   <p className="text-white text-sm font-medium">{a.name}</p>
@@ -175,16 +178,16 @@ function Dashboard() {
           }
         </SectionCard>
 
-        <SectionCard title="New Enquiries" icon={MessageSquare} count={unreadEnq} countLabel="unread" loading={loading}>
+        <SectionCard title="Pending Enquiries" icon={MessageSquare} count={unreadEnq} countLabel="unread" loading={loading}>
           {enquiries.filter(e => !readIds.has(e.id)).length === 0
             ? <EmptyRow text="No new enquiries" />
-            : enquiries.filter(e => !readIds.has(e.id)).slice(0, 5).map((e, i) => (
+            : [...enquiries].reverse().filter(e => !readIds.has(e.id)).map((e, i) => (
               <div key={i} className="px-5 py-3.5 flex items-center justify-between hover:bg-gray-800/30 transition">
                 <div>
                   <p className="text-white text-sm font-medium">{e.name}</p>
                   <p className="text-gray-500 text-xs">{e.enquiryType} · {e.phone}</p>
                 </div>
-                <span className={`text-xs px-2.5 py-1 rounded-full font-medium ${statusColor["New"]}`}>Unread</span>
+                <span className={`text-xs px-2.5 py-1 rounded-full font-medium ${statusColor["New"]}`}>New</span>
               </div>
             ))
           }

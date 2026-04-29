@@ -47,12 +47,8 @@ function TimetablePage() {
 
         {/* HERO */}
         <div className="text-center space-y-4">
-          <span className="text-red-600 font-semibold tracking-widest">
-            SCHEDULE
-          </span>
-          <h1 className="text-4xl md:text-5xl font-bold">
-            Gym Timings & Schedule
-          </h1>
+          <span className="text-red-600 font-semibold tracking-widest">SCHEDULE</span>
+          <h1 className="text-4xl md:text-5xl font-bold">Gym Timings & Schedule</h1>
           <p className="text-white/70 max-w-2xl mx-auto">
             Plan your workouts with clarity. Find gym hours, program timings,
             trainer availability, and holiday information in one place.
@@ -92,7 +88,7 @@ function TimetablePage() {
                       </td>
                       {DAYS.map((d) => (
                         <td key={d} className="px-4 py-3 text-white/70">
-                          {row[d]}
+                          {row[d] || "—"}
                         </td>
                       ))}
                     </tr>

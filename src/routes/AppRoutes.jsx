@@ -3,7 +3,7 @@ import HomePage from "../pages/HomePage.jsx";
 import AboutPage from "../pages/AboutPage.jsx";
 import Gallery from "../pages/Gallery.jsx";
 import Membership from "../pages/MemberShip.jsx";
-import ProgramUser from "../components/Program/ProgramUser.jsx";
+import ProgramUser, { ProgramDetails } from "../components/Program/ProgramUser.jsx";
 import Trainer, { TrainerDetails } from "../pages/Trainer.jsx";
 import TrainerEnquiryForm from "../components/Trainer/TrainerEnquiryForm.jsx";
 import Payment from "../pages/Payment.jsx";
@@ -31,6 +31,7 @@ function AppRoutes() {
       <Route path="/register" element={<HomePage />} />
       <Route path="/about" element={<AboutPage />} />
       <Route path="/programs" element={<ProgramUser />} />
+      <Route path="/programs/:id" element={<ProgramDetails />} />
       <Route path="/trainer" element={<Trainer />} />
       <Route path="/trainers/:id" element={<TrainerDetails />} />
       <Route path="/trainers/:id/enquiry" element={<TrainerEnquiryForm />} />

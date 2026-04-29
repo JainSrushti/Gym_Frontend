@@ -2,28 +2,33 @@ import { useState, useRef, useEffect } from "react";
 import { ChevronDown } from "lucide-react";
 import { useLocation } from "react-router-dom";
 
+const API = "http://localhost:8080/api";
+
 const programs = [
-  { label: "Strength Training",          group: "program" },
-  { label: "Weight Loss Program",         group: "program" },
-  { label: "Personal Training",           group: "program" },
-  { label: "Functional Training",         group: "program" },
-  { label: "Cardio & HIIT",               group: "program" },
-  { label: "Body Transformation",         group: "program" },
-  { label: "Membership - Monthly Plan",   group: "membership" },
+  { label: "Strength Training", group: "program" },
+  { label: "Weight Loss Program", group: "program" },
+  { label: "Personal Training", group: "program" },
+  { label: "Functional Training", group: "program" },
+  { label: "Cardio & HIIT", group: "program" },
+  { label: "Body Transformation", group: "program" },
+  { label: "Membership - Monthly Plan", group: "membership" },
   { label: "Membership - Quarterly Plan", group: "membership" },
-  { label: "Membership - Yearly Plan",    group: "membership" },
+  { label: "Membership - Yearly Plan", group: "membership" },
 ];
 
 function JoinForm() {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
-  const location = useLocation();
-  const preSelected = new URLSearchParams(location.search).get("plan") || "";
-  const [program, setProgram] = useState(preSelected);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [program, setProgram] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [showProgramError, setShowProgramError] = useState(false);
+
+  const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
 
+  const location = useLocation();
+
+  // scroll to form
   useEffect(() => {
     if (location.hash === "#join-form") {
       setTimeout(() => {
@@ -32,149 +37,157 @@ function JoinForm() {
     }
   }, [location]);
 
+  // close dropdown
   useEffect(() => {
     function handleClick(e) {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target))
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
         setDropdownOpen(false);
+      }
     }
     document.addEventListener("mousedown", handleClick);
     return () => document.removeEventListener("mousedown", handleClick);
   }, []);
 
+  // submit
   const handleSubmit = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
+    if (phone.length !== 10) return;
+    if (!program) { setShowProgramError(true); return; }
 
-  if (!program) {
-    return;
-  }
+    try {
+      const response = await fetch(`${API}/join`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ name, phone, program }),
+      });
 
-  try {
-    const response = await fetch("http://localhost:8080/api/join", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name: name,
-        phone: phone,
-        program: program,
-      }),
-    });
+      if (!response.ok) throw new Error("Failed to submit");
 
-    if (!response.ok) throw new Error("Failed to submit");
-    setSubmitted(true);
-    setName(""); setPhone(""); setProgram("");
-  } catch (error) {
-    console.error("Error:", error);
-  }
-};
+      setSubmitted(true);
+      setName("");
+      setPhone("");
+      setProgram("");
+    } catch (error) {
+      alert("Something went wrong!");
+      console.log(error);
+    }
+  };
 
   return (
     <section id="join-form" className="bg-black py-20 px-6 select-none">
       <div className="max-w-xl mx-auto">
 
         <div className="text-center mb-10">
-          <span className="text-red-600 font-semibold tracking-widest text-sm">GET STARTED</span>
-          <h2 className="text-4xl font-bold text-white mt-3">Join Power<span className="text-red-500">GYM</span></h2>
-          <p className="text-white/60 mt-3 text-sm">Fill in your details and we'll get you started on your fitness journey.</p>
+          <span className="text-red-600 font-semibold tracking-widest text-sm">
+            GET STARTED
+          </span>
+          <h2 className="text-4xl font-bold text-white mt-3">
+            Join Power<span className="text-red-500">GYM</span>
+          </h2>
         </div>
 
         {submitted ? (
-          <div className="bg-[#0b0b0b] border border-green-600/30 rounded-xl p-8 text-center space-y-4">
+          <div className="bg-[#0b0b0b] border border-green-600/30 rounded-xl p-8 text-center">
             <div className="text-5xl">✅</div>
-            <h3 className="text-white text-xl font-bold">Submitted Successfully!</h3>
-            <p className="text-white/60 text-sm">Thank you! We will contact you soon.</p>
-            <button onClick={() => setSubmitted(false)} className="block w-full text-white/40 hover:text-white text-xs mt-2 transition">Submit another</button>
+            <h3 className="text-white text-xl font-bold mt-3">
+              Submitted Successfully!
+            </h3>
+            <p className="text-white/60 text-sm mt-2">
+              We will contact you soon.
+            </p>
+            <button
+              onClick={() => setSubmitted(false)}
+              className="text-white/50 mt-4 text-sm"
+            >
+              Submit another
+            </button>
           </div>
         ) : (
           <form
             onSubmit={handleSubmit}
             className="bg-[#0b0b0b] border border-white/10 rounded-xl p-8 space-y-5"
           >
-          {/* Name */}
-          <div>
-            <label className="block text-white/70 text-sm mb-2">Full Name</label>
+
+            {/* Name */}
             <input
               type="text"
-              required
+              placeholder="Full Name"
               value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="Enter your full name"
-              className="w-full px-4 py-3 rounded bg-black border border-white/20 text-white placeholder-white/40 focus:outline-none focus:border-red-600"
-            />
-          </div>
-
-          {/* Phone */}
-          <div>
-            <label className="block text-white/70 text-sm mb-2">Contact Number</label>
-            <input
-              type="tel"
               required
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              placeholder="10-digit phone number"
-              className="w-full px-4 py-3 rounded bg-black border border-white/20 text-white placeholder-white/40 focus:outline-none focus:border-red-600"
+              onChange={(e) => setName(e.target.value)}
+              className="w-full p-3 bg-black border border-white/20 text-white rounded"
             />
-          </div>
 
-          {/* Program dropdown */}
-          <div>
-            <label className="block text-white/70 text-sm mb-2">Select Program</label>
-            <div className="relative" ref={dropdownRef}>
+            {/* Phone */}
+            <div>
+              <input
+                type="tel"
+                placeholder="Phone Number (10 digits)"
+                value={phone}
+                required
+                maxLength={10}
+                pattern="[0-9]{10}"
+                onChange={(e) => {
+                  const val = e.target.value.replace(/\D/g, "").slice(0, 10);
+                  setPhone(val);
+                }}
+                className={`w-full p-3 bg-black border text-white rounded focus:outline-none focus:border-red-600 ${
+                  phone.length > 0 && phone.length < 10 ? "border-red-500" : "border-white/20"
+                }`}
+              />
+              {phone.length > 0 && phone.length < 10 && (
+                <p className="text-red-400 text-xs mt-1">Enter a valid 10-digit mobile number</p>
+              )}
+            </div>
+
+            {/* Dropdown */}
+            <div ref={dropdownRef} className="relative">
               <button
                 type="button"
-                onClick={() => setDropdownOpen((p) => !p)}
-                className="w-full px-4 py-3 rounded bg-black border border-white/20 text-left flex items-center justify-between focus:outline-none focus:border-red-600"
+                onClick={() => setDropdownOpen(!dropdownOpen)}
+                className={`w-full p-3 bg-black border text-left flex justify-between text-white ${
+                  showProgramError && !program ? "border-red-500" : "border-white/20"
+                }`}
               >
                 <span className={program ? "text-white" : "text-white/40"}>
                   {program || "Select Program"}
                 </span>
-                <ChevronDown
-                  size={16}
-                  className={`text-gray-400 transition-transform duration-200 ${dropdownOpen ? "rotate-180" : ""}`}
-                />
+                <ChevronDown />
               </button>
+              {showProgramError && !program && (
+                <p className="text-red-400 text-xs mt-1">Please select a program or membership</p>
+              )}
 
               {dropdownOpen && (
-                <ul className="absolute top-full left-0 w-full mt-1 bg-[#111] border border-white/10 rounded-lg overflow-hidden z-20 shadow-xl">
-                  <li className="px-4 py-2 text-xs font-bold text-red-500 uppercase tracking-widest bg-[#0a0a0a]">
-                    Programs
-                  </li>
-                  {programs.filter((p) => p.group === "program").map((p) => (
-                    <li key={p.label} onClick={() => { setProgram(p.label); setDropdownOpen(false); }}
-                      className={`px-4 py-3 text-sm cursor-pointer transition ${
-                        program === p.label ? "bg-red-600 text-white" : "text-gray-300 hover:bg-red-600/20 hover:text-white"
-                      }`}
-                    >
-                      {p.label}
-                    </li>
-                  ))}
-                  <li className="px-4 py-2 text-xs font-bold text-red-500 uppercase tracking-widest bg-[#0a0a0a] border-t border-white/10">
-                    Membership Plans
-                  </li>
-                  {programs.filter((p) => p.group === "membership").map((p) => (
-                    <li key={p.label} onClick={() => { setProgram(p.label); setDropdownOpen(false); }}
-                      className={`px-4 py-3 text-sm cursor-pointer transition ${
-                        program === p.label ? "bg-red-600 text-white" : "text-gray-300 hover:bg-red-600/20 hover:text-white"
-                      }`}
-                    >
-                      {p.label}
-                    </li>
-                  ))}
-                </ul>
+                <div className="absolute w-full bg-[#111] border border-white/10 mt-1 z-20">
+
+                  <p className="text-xs text-red-500 p-2">Programs</p>
+                  {programs
+                    .filter((p) => p.group === "program")
+                    .map((p) => (
+                      <div
+                        key={p.label}
+                        onClick={() => {
+                          setProgram(p.label);
+                          setShowProgramError(false);
+                          setDropdownOpen(false);
+                        }}
+                        className="p-2 text-white hover:bg-red-600/20 cursor-pointer"
+                      >
+                        {p.label}
+                      </div>
+                    ))}
+                </div>
               )}
             </div>
-          </div>
 
-          <button
-            type="submit"
-            className="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-3 rounded transition"
-          >
-            Submit
-          </button>
+            <button className="w-full bg-red-600 text-white p-3 rounded">
+              Submit
+            </button>
           </form>
         )}
-
       </div>
     </section>
   );
