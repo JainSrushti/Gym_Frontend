@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Plus, Trash2, X, Pencil } from "lucide-react";
 import ConfirmDialog from "../../components/Admin/ConfirmDialog.jsx";
 
-const API = "http://localhost:8080/api/offers";
+const API = "https://gym-backend-8aij.onrender.com/api/offers";
 
 const emptyForm = { tag: "", title: "", desc: "", price: "", details: "" };
 
