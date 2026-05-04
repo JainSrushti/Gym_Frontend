@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
-const API = "http://localhost:8080/api/membership-plans";
+const API = "https://gym-backend-8aij.onrender.com/api/membership-plans";
 
 function MembershipPlans() {
   const navigate = useNavigate();

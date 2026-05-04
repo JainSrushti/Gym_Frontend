@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { X } from "lucide-react";
 
-const API = "http://localhost:8080/api/programs";
+const API = "https://gym-backend-8aij.onrender.com/api/programs";
 const FALLBACK = "https://images.unsplash.com/photo-1583454110551-21f2fa2afe61";
 
 function getBenefits(p) {

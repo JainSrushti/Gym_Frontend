@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Dumbbell, ClipboardList, MessageSquare, CalendarDays, UserPlus, Tag, Users } from "lucide-react";
 
-const TRAINERS_API     = "http://localhost:8080/api/gym-trainers";
-const PROGRAMS_API     = "http://localhost:8080/api/programs";
-const APPLICATIONS_API = "http://localhost:8080/api/trainers";
-const JOIN_API         = "http://localhost:8080/api/join";
-const ENQUIRIES_API    = "http://localhost:8080/api/enquiries";
-const OFFERS_API       = "http://localhost:8080/api/offers";
-const MEMBERSHIP_API   = "http://localhost:8080/api/membership-plans";
+const TRAINERS_API     = "https://gym-backend-8aij.onrender.com/api/gym-trainers";
+const PROGRAMS_API     = "https://gym-backend-8aij.onrender.com/api/programs";
+const APPLICATIONS_API = "https://gym-backend-8aij.onrender.com/api/trainers";
+const JOIN_API         = "https://gym-backend-8aij.onrender.com/api/join";
+const ENQUIRIES_API    = "https://gym-backend-8aij.onrender.com/api/enquiries";
+const OFFERS_API       = "https://gym-backend-8aij.onrender.com/api/offers";
+const MEMBERSHIP_API   = "https://gym-backend-8aij.onrender.com/api/membership-plans";
 
 const statusColor = {
   Pending:  "bg-yellow-500/10 text-yellow-400 border border-yellow-500/20",
@@ -82,7 +82,7 @@ function Dashboard() {
       fetch(ENQUIRIES_API).then(r => r.json()),
       fetch(OFFERS_API).then(r => r.json()),
       fetch(MEMBERSHIP_API).then(r => r.json()),
-      fetch("http://localhost:8080/api/timetable").then(r => r.json()),
+      fetch("https://gym-backend-8aij.onrender.com/api/timetable").then(r => r.json()),
     ]).then(([t, p, a, j, e, o, m, tt]) => {
       if (t.status  === "fulfilled") setTrainers(Array.isArray(t.value)     ? t.value  : []);
       if (p.status  === "fulfilled") setPrograms(Array.isArray(p.value)     ? p.value  : []);

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 
-const API_URL = "http://localhost:8080/api/gym-trainers";
+const API_URL = "https://gym-backend-8aij.onrender.com/api/gym-trainers";
 
 async function loadTrainers() {
   try {
@@ -238,7 +238,7 @@ function JobForm() {
   async function handleSubmit(e) {
     e.preventDefault();
     try {
-      const res = await fetch("http://localhost:8080/api/trainer-applications", {
+      const res = await fetch("https://gym-backend-8aij.onrender.com/api/trainer-applications", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),

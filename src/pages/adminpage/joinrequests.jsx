@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { CheckCircle, Clock, Users } from "lucide-react";
 
-const API = "http://localhost:8080/api";
+const API = "https://gym-backend-8aij.onrender.com/api";
 
 function joinrequests() {
   const [requests, setRequests]   = useState([]);

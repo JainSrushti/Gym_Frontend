@@ -17,7 +17,7 @@ function EnquiryAdmin() {
   const [readIds, setReadIds]     = useState(getReadIds);
 
   useEffect(() => {
-    fetch("http://localhost:8080/api/enquiries")
+    fetch("https://gym-backend-8aij.onrender.com/api/enquiries")
       .then((r) => r.json())
       .then((data) => setEnquiries([...data].reverse()))
       .catch((err) => console.error("Error fetching enquiries:", err));

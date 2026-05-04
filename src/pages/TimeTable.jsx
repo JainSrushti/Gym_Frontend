@@ -11,8 +11,8 @@ function TimetablePage() {
     async function fetchData() {
       try {
         const [hoursRes, tableRes] = await Promise.all([
-          fetch("http://localhost:8080/api/timetable/hours"),
-          fetch("http://localhost:8080/api/timetable/weekly"),
+          fetch("https://gym-backend-8aij.onrender.com/api/timetable/hours"),
+          fetch("https://gym-backend-8aij.onrender.com/api/timetable/weekly"),
         ]);
 
         if (hoursRes.ok) {

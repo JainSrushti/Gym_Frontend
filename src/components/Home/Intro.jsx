@@ -107,7 +107,7 @@ function Intro() {
   const [visible, setVisible] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:8080/api/offers")
+    fetch("https://gym-backend-8aij.onrender.com/api/offers")
       .then(r => r.json())
       .then(data => setOffers(Array.isArray(data) ? data : []))
       .catch(() => {});

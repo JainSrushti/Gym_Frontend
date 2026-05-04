@@ -11,9 +11,9 @@ function AdminLayout() {
     async function fetchCounts() {
       try {
         const [eRes, jRes, tRes] = await Promise.all([
-          fetch("http://localhost:8080/api/enquiries"),
-          fetch("http://localhost:8080/api/join"),
-          fetch("http://localhost:8080/api/trainers"),
+          fetch("https://gym-backend-8aij.onrender.com/api/enquiries"),
+          fetch("https://gym-backend-8aij.onrender.com/api/join"),
+          fetch("https://gym-backend-8aij.onrender.com/api/trainers"),
         ]);
         const enquiries    = await eRes.json();
         const joinRequests = await jRes.json();

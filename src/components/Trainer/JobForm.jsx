@@ -7,7 +7,7 @@ function JobForm() {
   async function handleSubmit(e) {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:8080/api/trainers", {
+      const response = await fetch("https://gym-backend-8aij.onrender.com/api/trainers", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),

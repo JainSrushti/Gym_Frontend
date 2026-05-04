@@ -13,22 +13,22 @@ function TimetableAdmin() {
   const [error,     setError]     = useState("");
 
   useEffect(() => {
-    fetch("http://localhost:8080/api/timetable/hours")
+    fetch("https://gym-backend-8aij.onrender.com/api/timetable/hours")
       .then(r => r.json())
       .then(d => { if (Array.isArray(d)) setGymHours(d.sort((a, b) => a.id - b.id)); })
       .catch(() => {});
 
-    fetch("http://localhost:8080/api/timetable/weekly")
+    fetch("https://gym-backend-8aij.onrender.com/api/timetable/weekly")
       .then(r => r.json())
       .then(d => { 
         if (Array.isArray(d) && d.length) setTimetable(d.sort((a, b) => a.id - b.id));
-        else fetch("http://localhost:8080/api/timetable")
+        else fetch("https://gym-backend-8aij.onrender.com/api/timetable")
           .then(r => r.json())
           .then(d2 => { if (Array.isArray(d2)) setTimetable(d2.sort((a, b) => a.id - b.id)); })
           .catch(() => {});
       })
       .catch(() => {
-        fetch("http://localhost:8080/api/timetable")
+        fetch("https://gym-backend-8aij.onrender.com/api/timetable")
           .then(r => r.json())
           .then(d2 => { if (Array.isArray(d2)) setTimetable(d2.sort((a, b) => a.id - b.id)); })
           .catch(() => {});
@@ -50,7 +50,7 @@ function TimetableAdmin() {
   async function removeHourCard(i) {
     const card = gymHours[i];
     if (card.id) {
-      await fetch(`http://localhost:8080/api/timetable/hours/${card.id}`, { method: "DELETE" }).catch(() => {});
+      await fetch(`https://gym-backend-8aij.onrender.com/api/timetable/hours/${card.id}`, { method: "DELETE" }).catch(() => {});
     }
     setGymHours(prev => prev.filter((_, idx) => idx !== i));
   }
@@ -58,7 +58,7 @@ function TimetableAdmin() {
   async function removeRow(i) {
     const row = timetable[i];
     if (row.id) {
-      await fetch(`http://localhost:8080/api/timetable/weekly/${row.id}`, { method: "DELETE" }).catch(() => {});
+      await fetch(`https://gym-backend-8aij.onrender.com/api/timetable/weekly/${row.id}`, { method: "DELETE" }).catch(() => {});
     }
     setTimetable(prev => prev.filter((_, idx) => idx !== i));
   }
@@ -67,7 +67,7 @@ function TimetableAdmin() {
     setError("");
     try {
       // Save gym hours
-      await fetch("http://localhost:8080/api/timetable/hours", {
+      await fetch("https://gym-backend-8aij.onrender.com/api/timetable/hours", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(gymHours),
@@ -76,7 +76,7 @@ function TimetableAdmin() {
       // Save timetable rows — PUT for existing (has id), POST for new
       const putRequests = timetable
         .filter(r => r.id)
-        .map(r => fetch(`http://localhost:8080/api/timetable/weekly/${r.id}`, {
+        .map(r => fetch(`https://gym-backend-8aij.onrender.com/api/timetable/weekly/${r.id}`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(r),
@@ -84,7 +84,7 @@ function TimetableAdmin() {
 
       const newRows = timetable.filter(r => !r.id);
       const postRequests = newRows.length
-        ? [fetch("http://localhost:8080/api/timetable/weekly", {
+        ? [fetch("https://gym-backend-8aij.onrender.com/api/timetable/weekly", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(newRows),
@@ -98,8 +98,8 @@ function TimetableAdmin() {
 
       // Reload fresh data from DB
       const [h, t] = await Promise.all([
-        fetch("http://localhost:8080/api/timetable/hours").then(r => r.json()),
-        fetch("http://localhost:8080/api/timetable/weekly").then(r => r.json()),
+        fetch("https://gym-backend-8aij.onrender.com/api/timetable/hours").then(r => r.json()),
+        fetch("https://gym-backend-8aij.onrender.com/api/timetable/weekly").then(r => r.json()),
       ]);
       if (Array.isArray(h) && h.length) setGymHours(h.sort((a, b) => a.id - b.id));
       if (Array.isArray(t) && t.length) setTimetable(t.sort((a, b) => a.id - b.id));

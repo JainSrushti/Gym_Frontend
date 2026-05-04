@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { ChevronDown } from "lucide-react";
 import { useLocation } from "react-router-dom";
 
-const API = "http://localhost:8080/api";
+const API = "https://gym-backend-8aij.onrender.com/api";
 
 const programs = [
   { label: "Strength Training", group: "program" },

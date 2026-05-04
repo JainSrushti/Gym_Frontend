@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Plus, Trash2, X, CheckCircle, XCircle, Clock, Pencil } from "lucide-react";
 import ConfirmDialog from "../../components/Admin/ConfirmDialog.jsx";
 
-const API = "http://localhost:8080/api/gym-trainers";
+const API = "https://gym-backend-8aij.onrender.com/api/gym-trainers";
 
 const statusStyles = {
   Pending:  { color: "text-yellow-400 bg-yellow-500/10 border-yellow-500/20", icon: Clock },
@@ -52,7 +52,7 @@ function TrainerAdmin() {
   }, []);
 
   useEffect(() => {
-    fetch("http://localhost:8080/api/trainers")
+    fetch("https://gym-backend-8aij.onrender.com/api/trainers")
       .then((res) => res.json())
       .then((data) => setApplications([...data].reverse()))
       .catch((err) => console.error("Application fetch error:", err));
@@ -87,7 +87,7 @@ function TrainerAdmin() {
 
   const updateAppStatus = async (id, status) => {
     try {
-      const endpoint = status === "Approved" ? `http://localhost:8080/api/trainers/${id}/approve` : `http://localhost:8080/api/trainers/${id}/reject`;
+      const endpoint = status === "Approved" ? `https://gym-backend-8aij.onrender.com/api/trainers/${id}/approve` : `https://gym-backend-8aij.onrender.com/api/trainers/${id}/reject`;
       const res = await fetch(endpoint, { method: "PUT" });
       const updated = await res.json();
       setApplications((prev) => prev.map((app) => (app.id === id ? updated : app)));

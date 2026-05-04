@@ -11,7 +11,7 @@ function TimingsPreview() {
   const [gymHours, setGymHours] = useState(DEFAULT_GYM_HOURS);
 
   useEffect(() => {
-fetch("http://localhost:8080/api/timetable/hours")
+fetch("https://gym-backend-8aij.onrender.com/api/timetable/hours")
       .then(r => r.json())
       .then(data => { if (Array.isArray(data) && data.length) setGymHours(data); })
       .catch(() => {});

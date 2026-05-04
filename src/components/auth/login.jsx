@@ -9,7 +9,7 @@ function Modal({ isOpen, onClose, onSwitchToRegister }) {
 
   const handleLogin = async () => {
     try {
-      const res = await fetch("http://localhost:8080/api/admin/login", {
+      const res = await fetch("https://gym-backend-8aij.onrender.com/api/admin/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

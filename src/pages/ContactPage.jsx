@@ -31,7 +31,7 @@ function ContactPage() {
   };
 
   try {
-    const response = await fetch("http://localhost:8080/api/enquiries", {
+    const response = await fetch("https://gym-backend-8aij.onrender.com/api/enquiries", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
