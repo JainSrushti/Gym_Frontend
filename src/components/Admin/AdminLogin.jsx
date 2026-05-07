@@ -90,7 +90,7 @@ function AdminLogin() {
               <label className="block text-gray-400 text-xs font-medium mb-2">Email Address</label>
               <div className="relative">
                 <Mail size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-600" />
-                <input type="email" required placeholder="admin@powergym.com"
+                <input type="email" required placeholder="Enter your email"
                   value={form.email}
                   onChange={(e) => setForm({ ...form, email: e.target.value })}
                   className="w-full bg-[#0d0d0d] border border-gray-800 text-white text-sm rounded-xl pl-10 pr-4 py-3.5 focus:outline-none focus:border-red-500 placeholder-gray-700 transition"
