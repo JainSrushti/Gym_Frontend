@@ -167,7 +167,7 @@ function Intro() {
             <MobileCarousel offers={offers} visible={visible} />
 
             {/* Desktop: 3-col grid */}
-            <div className="hidden md:grid md:grid-cols-3 gap-3">
+            <div className="hidden md:grid md:grid-cols-3 gap-3 items-start">
               {offers.map((offer, i) => (
                 <OfferCard key={offer.id || i} offer={offer} visible={visible[i] || false} />
               ))}
