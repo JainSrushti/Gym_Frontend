@@ -161,11 +161,28 @@ function JoinForm() {
               )}
 
               {dropdownOpen && (
-                <div className="absolute w-full bg-[#111] border border-white/10 mt-1 z-20">
+                <div className="absolute w-full bg-[#111] border border-white/10 mt-1 z-20 max-h-60 overflow-y-auto">
 
                   <p className="text-xs text-red-500 p-2">Programs</p>
                   {programs
                     .filter((p) => p.group === "program")
+                    .map((p) => (
+                      <div
+                        key={p.label}
+                        onClick={() => {
+                          setProgram(p.label);
+                          setShowProgramError(false);
+                          setDropdownOpen(false);
+                        }}
+                        className="p-2 text-white hover:bg-red-600/20 cursor-pointer"
+                      >
+                        {p.label}
+                      </div>
+                    ))}
+
+                  <p className="text-xs text-red-500 p-2 border-t border-white/10">Membership</p>
+                  {programs
+                    .filter((p) => p.group === "membership")
                     .map((p) => (
                       <div
                         key={p.label}
