@@ -66,6 +66,12 @@ function AdminLogin() {
             <p className="text-gray-600 text-xs">Authorized personnel only</p>
           </div>
         </div>
+
+        {/* Go to Home */}
+        <a href="/" className="flex items-center gap-2 text-gray-400 hover:text-white text-sm font-bold transition">
+          ← Go to Home Page
+        </a>
+
       </div>
 
       {/* RIGHT — Login Form */}
@@ -133,11 +139,6 @@ function AdminLogin() {
           <p className="text-gray-700 text-xs text-center mt-8">
             © {new Date().getFullYear()} PowerGYM. All rights reserved.
           </p>
-          <div className="mt-4">
-            <a href="/" className="text-gray-400 hover:text-white text-sm font-bold transition flex items-center gap-1">
-              ← Go to Home Page
-            </a>
-          </div>
         </div>
       </div>
 
