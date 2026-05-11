@@ -133,8 +133,8 @@ function AdminLogin() {
           <p className="text-gray-700 text-xs text-center mt-8">
             © {new Date().getFullYear()} PowerGYM. All rights reserved.
           </p>
-          <div className="text-center mt-3">
-            <a href="/" className="text-gray-500 hover:text-white text-xs transition">
+          <div className="mt-4">
+            <a href="/" className="text-gray-400 hover:text-white text-sm font-bold transition flex items-center gap-1">
               ← Go to Home Page
             </a>
           </div>

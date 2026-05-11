@@ -219,22 +219,26 @@ function TrainerAdmin() {
             <form onSubmit={handleAdd} className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 {[
-                  { key: "name",            placeholder: "Full Name" },
-                  { key: "specialization",  placeholder: "Specialization" },
-                  { key: "experience",      placeholder: "Experience (e.g. 5+ years)" },
-                  { key: "availability",    placeholder: "Availability (e.g. Morning & Evening)" },
-                  { key: "phoneNumber",     placeholder: "WhatsApp Number" },
-                  { key: "bestFor",         placeholder: "Best For (comma separated)" },
-                  { key: "programsHandled", placeholder: "Programs Handled (comma separated)" },
-                ].map(({ key, placeholder }) => (
+                  { key: "name",            placeholder: "e.g. John Smith",             label: "Full Name" },
+                  { key: "specialization",  placeholder: "e.g. Strength & Conditioning", label: "Specialization" },
+                  { key: "experience",      placeholder: "e.g. 5+ years",               label: "Experience" },
+                  { key: "availability",    placeholder: "e.g. Morning & Evening",       label: "Availability" },
+                  { key: "phoneNumber",     placeholder: "e.g. 9876543210",              label: "WhatsApp Number" },
+                  { key: "bestFor",         placeholder: "e.g. Beginners, Weight loss",  label: "Best For (comma separated)" },
+                  { key: "programsHandled", placeholder: "e.g. HIIT, Yoga, Strength",   label: "Programs Handled (comma separated)" },
+                ].map(({ key, placeholder, label }) => (
                   <div key={key}>
+                    <label className="block text-gray-400 text-xs font-medium mb-1">{label}</label>
                     <input placeholder={placeholder} value={form[key] || ""} onChange={(e) => setForm({ ...form, [key]: e.target.value })} className={inputCls} />
                   </div>
                 ))}
               </div>
 
               {/* Bio */}
-              <textarea placeholder="Bio" value={form.bio || ""} onChange={(e) => setForm({ ...form, bio: e.target.value })} rows={3} className={`${inputCls} resize-none`} />
+              <div>
+                <label className="block text-gray-400 text-xs font-medium mb-1">Bio</label>
+                <textarea placeholder="Short bio about the trainer..." value={form.bio || ""} onChange={(e) => setForm({ ...form, bio: e.target.value })} rows={3} className={`${inputCls} resize-none`} />
+              </div>
 
               {/* Photo Upload */}
               <div>
