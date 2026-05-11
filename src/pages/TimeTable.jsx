@@ -58,12 +58,30 @@ function TimetablePage() {
         {/* GYM HOURS */}
         {gymHours.length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {gymHours.map((item, i) => (
-              <div key={i} className="border border-white/10 rounded-xl p-6 text-center">
-                <h3 className="text-xl font-semibold mb-2">{item.title}</h3>
-                <p className="text-white/70">{item.time}</p>
-              </div>
-            ))}
+            {gymHours.map((item, i) => {
+              const icons = ["🌅", "🌆", "📅"];
+              const gradients = [
+                "from-red-600/20 to-orange-600/10",
+                "from-blue-600/20 to-purple-600/10",
+                "from-green-600/20 to-teal-600/10",
+              ];
+              const borders = ["border-red-600/30", "border-blue-600/30", "border-green-600/30"];
+              const accents = ["text-red-400", "text-blue-400", "text-green-400"];
+              return (
+                <div key={i} className={`relative bg-gradient-to-br ${gradients[i] || gradients[0]} border ${borders[i] || borders[0]} rounded-2xl p-7 text-center overflow-hidden group hover:-translate-y-1 transition-all duration-300`}>
+                  {/* Glow */}
+                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-white/5 rounded-2xl" />
+                  {/* Icon */}
+                  <div className="text-4xl mb-4">{icons[i] || "⏰"}</div>
+                  {/* Title */}
+                  <h3 className={`text-lg font-bold mb-2 ${accents[i] || accents[0]} uppercase tracking-widest text-sm`}>{item.title}</h3>
+                  {/* Divider */}
+                  <div className={`w-10 h-0.5 mx-auto mb-3 bg-gradient-to-r ${i === 0 ? "from-red-500 to-orange-500" : i === 1 ? "from-blue-500 to-purple-500" : "from-green-500 to-teal-500"}`} />
+                  {/* Time */}
+                  <p className="text-white text-xl font-bold">{item.time}</p>
+                </div>
+              );
+            })}
           </div>
         )}
 
